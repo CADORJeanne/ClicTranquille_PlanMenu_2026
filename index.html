@@ -26,6 +26,7 @@
      titre:    "Créer une punition",
      resume:   "Une phrase : ce que la fiche permet de faire.",
      duree:    "3 min",                    // facultatif
+     nouveau:  true,                       // facultatif : badge « ✨ Nouveau » (à retirer après quelques semaines)
      auteur:   "J. CADOR — RN Plan Menu",  // facultatif
      motsCles: ["retenue", "TIG"],         // aide la recherche
      alerte:   "Texte d'avertissement",    // facultatif : encart orange en haut de fiche
@@ -898,6 +899,7 @@ const FICHES = [
 },
 {
   id: "tablette-pairdrop",
+  nouveau: true,
   onglet: "tablettes",
   titre: "PairDrop : transférer un fichier entre deux appareils",
   icone: ICONES.pairdrop,
@@ -1307,6 +1309,7 @@ const FICHES = [
 
 {
   id: "live-quiz",
+  nouveau: true,
   onglet: "applis",
   rubrique: "Activités en classe",
   titre: "Live Quiz : le quiz en direct (type Kahoot / Plickers)",
@@ -1368,6 +1371,7 @@ const FICHES = [
 
 {
   id: "plan-de-classe-z",
+  nouveau: true,
   onglet: "applis",
   rubrique: "Gérer sa classe et inclure",
   titre: "Plan de Classe Z : créer et gérer ses plans de classe",
@@ -1435,6 +1439,7 @@ const FICHES = [
 
 {
   id: "cleanup-pictures",
+  nouveau: true,
   onglet: "outils",
   titre: "Cleanup.pictures : effacer un élément d'une image",
   icone: ICONES.cleanup,
@@ -1678,6 +1683,7 @@ const FICHES = [
 
 {
   id: "vera-verification",
+  nouveau: true,
   onglet: "ia",
   presentation: true,
   titre: "Vera : vérifier une information par téléphone ou WhatsApp",
@@ -1789,6 +1795,25 @@ a{color:var(--c);text-underline-offset:3px}
 .pastille{font-size:12.5px;font-weight:700;letter-spacing:.04em;
   padding:4px 11px;border-radius:99px;background:var(--clair);color:var(--c)}
 .pastille.plein{background:var(--c);color:#fff}
+.pastille.neuf,.fiche-tete .pastille.neuf{background:linear-gradient(115deg,#FF3D7F,#FF7A1A 55%,#FFC43D);color:#fff;text-transform:uppercase;letter-spacing:.08em}
+.fiche-carte{position:relative}
+.sticker{position:absolute;top:12px;right:-4px;z-index:1;display:flex;align-items:center;gap:5px;
+  font-size:11.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#fff;
+  padding:6px 14px 6px 10px;border-radius:99px 0 0 99px;overflow:hidden;pointer-events:none;
+  background:linear-gradient(115deg,#FF3D7F 0%,#FF7A1A 55%,#FFC43D 100%);
+  box-shadow:0 3px 10px rgba(255,61,127,.35),inset 0 -2px 0 rgba(0,0,0,.12);
+  transform:rotate(6deg);transform-origin:right center;animation:sticker-danse 3.2s ease-in-out infinite}
+.sticker svg{width:13px;height:13px;flex:0 0 auto;animation:sticker-etoile 3.2s ease-in-out infinite}
+.sticker::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.65) 50%,transparent 70%);
+  transform:translateX(-120%);animation:sticker-reflet 3.2s ease-in-out infinite}
+.fiche-carte:hover .sticker{animation-duration:1.2s}
+@keyframes sticker-danse{0%,70%,100%{transform:rotate(6deg) scale(1)}78%{transform:rotate(1deg) scale(1.08)}86%{transform:rotate(9deg) scale(1.03)}}
+@keyframes sticker-etoile{0%,70%,100%{transform:rotate(0) scale(1)}80%{transform:rotate(180deg) scale(1.3)}}
+@keyframes sticker-reflet{0%,60%{transform:translateX(-120%)}85%,100%{transform:translateX(120%)}}
+@media (prefers-reduced-motion:reduce){.sticker,.sticker svg,.sticker::after{animation:none}}
+@media print{.sticker{animation:none}.sticker::after{display:none}}
+.fiche-carte:has(.sticker) h3{padding-right:70px}
 
 .vide{background:#fff;border-radius:var(--r);padding:40px 28px;text-align:center;
   color:var(--gris);box-shadow:0 2px 0 var(--ombre)}
@@ -2062,6 +2087,7 @@ function carte(f){
   return `<button class="fiche-carte" data-fiche="${f.id}"
     style="--c:${o.couleur};--clair:${o.clair};--ombre:${o.couleur}33">
     <span class="bande"></span>
+    ${f.nouveau ? `<span class="sticker"><svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M12 1.5l2.6 6.9 7.4.4-5.8 4.6 2 7.1L12 16.4l-6.2 4.1 2-7.1L2 8.8l7.4-.4z"/></svg>New</span>` : ''}
     <h3>${f.icone ? `<span class="icone-carte">${f.icone}</span>` : ''}${esc(f.titre)}</h3>
     <p>${esc(f.resume)}</p>
     <div class="meta">
@@ -2148,6 +2174,7 @@ function htmlFiche(f, interactif){
       ${f.icone ? `<span class="icone-appli">${f.icone}</span>` : ''}
       <div style="flex:1;min-width:0">
       <div class="meta" style="padding:0">
+        ${f.nouveau ? `<span class="pastille neuf">★ New</span>` : ''}
         <span class="pastille">${esc(o.libelle)}</span>
         <span class="pastille">${etiquette(f)}</span>
         ${f.duree ? `<span class="pastille">${esc(f.duree)}</span>` : ''}
